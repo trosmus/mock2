@@ -1,0 +1,193 @@
+{
+  "COMMON": {
+    "MAIN_PAGE": "Main Page",
+    "LOADING": "Loading",
+    "UPLOADING": "Uploading",
+    "PROCESSING": "Processing",
+    "ANALYZING": "Analyzing",
+    "COMPLETE": "Complete", 
+    "CLOSE": "Close",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "ADD": "Add",
+    "REMOVE": "Remove",
+    "SELECT_ALL": "Select All",
+    "CLEAR_ALL": "Clear All",
+    "SEARCH": "Search",
+    "FILTER": "Filter",
+    "SORT": "Sort",
+    "VIEW": "View",
+    "DOWNLOAD": "Download",
+    "EXPORT": "Export",
+    "IMPORT": "Import",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "PREVIOUS": "Previous",
+    "HOME": "Home",
+    "SETTINGS": "Settings",
+    "HELP": "Help",
+    "ABOUT": "About",
+    "CONTACT": "Contact",
+    "PRIVACY": "Privacy",
+    "TERMS": "Terms",
+    "ERROR": "Error",
+    "SUCCESS": "Success",
+    "WARNING": "Warning",
+    "INFO": "Information",
+    "CONTINUE": "Continue",
+    "THEME": "Theme"
+  },
+  "MENU": {
+    "DASHBOARD": "Dashboard",
+    "UPLOAD": "Upload Data",
+    "EXPLORER": "Data Explorer",
+    "BUILDER": "Dashboard Builder",
+    "TRAIL": "Exploration Trail",
+    "AGENT": "AI Agent",
+    "SECTIONS": {
+      "MAIN": "Main",
+      "TOOLS": "Tools"
+    }
+  },
+  "UPLOAD": {
+    "TITLE": "Upload Your Logistics Data",
+    "SUBTITLE": "Drop your CSV files here or click to browse",
+    "FORMATS": "Supported formats: CSV, Excel (.xlsx)",
+    "MAX_SIZE": "Maximum file size: 50MB",
+    "DROP_ZONE": "Drop files here...",
+    "BROWSE": "Browse Files",
+    "SELECTED_FILES": "Selected Files",
+    "FILE_COUNT": "{{count}} file(s) selected",
+    "UPLOAD_BUTTON": "Upload Files",
+    "UPLOADING": "Uploading...",
+    "SUCCESS": "Files uploaded successfully!",
+    "ERROR": "Upload failed. Please try again.",
+    "REMOVE_FILE": "Remove file"
+  },
+  "LOADING": {
+    "TITLE": "Processing Your Data",
+    "SUBTITLE": "Please wait while we analyze your logistics data...",
+    "STEPS": {
+      "UPLOADING": "Uploading files",
+      "PARSING": "Parsing data structure", 
+      "VALIDATING": "Validating data quality",
+      "ANALYZING": "Performing initial analysis",
+      "GENERATING": "Generating insights",
+      "FINALIZING": "Finalizing dashboard"
+    },
+    "PROGRESS": "{{percent}}% complete",
+    "ESTIMATED_TIME": "Estimated time remaining: {{time}}"
+  },
+  "DASHBOARD": {
+    "TITLE": "Logistics Insights Dashboard",
+    "SUBTITLE": "Overview of your logistics operations",
+    "EXPLORE_BUTTON": "Explore in Detail",
+    "VIEW_ALL": "View All",
+    "REFRESH": "Refresh Data",
+    "LAST_UPDATED": "Last updated: {{time}}",
+    "CATEGORIES": {
+      "PERFORMANCE": "Performance Metrics",
+      "COSTS": "Cost Analysis", 
+      "DELAYS": "Delay Analysis",
+      "ROUTES": "Route Optimization"
+    },
+    "INSIGHTS": {
+      "TOTAL_ORDERS": "Total Orders",
+      "AVG_DELIVERY_TIME": "Avg Delivery Time",
+      "TOTAL_COST": "Total Cost",
+      "COST_PER_ORDER": "Cost per Order",
+      "DELAY_RATE": "Delay Rate",
+      "AVG_DELAY": "Average Delay",
+      "TOTAL_ROUTES": "Total Routes",
+      "ROUTE_EFFICIENCY": "Route Efficiency"
+    }
+  },
+  "EXPLORE": {
+    "TITLE": "Detailed Analysis",
+    "BREADCRUMB_HOME": "Dashboard",
+    "BACK_TO_DASHBOARD": "Back to Dashboard",
+    "DRILL_DOWN": "Drill Down Further",
+    "VIEW_RAW_DATA": "View Raw Data"
+  },
+  "EXPLORER": {
+    "TITLE": "Explorer",
+    "SUBTITLE": "Browse and filter your raw logistics data",
+    "SEARCH_PLACEHOLDER": "Search across all columns...",
+    "FILTER_BY": "Filter by",
+    "SHOW_FILTERS": "Show Filters",
+    "HIDE_FILTERS": "Hide Filters",
+    "CLEAR_FILTERS": "Clear All Filters",
+    "ROWS_PER_PAGE": "Rows per page",
+    "TOTAL_ROWS": "Total: {{count}} rows",
+    "NO_DATA": "No data available",
+    "LOADING_DATA": "Loading data...",
+    "EXPORT_CSV": "Export as CSV",
+    "EXPORT_EXCEL": "Export as Excel"
+  },
+  "BUILDER": {
+    "TITLE": "Dashboard Builder",
+    "SUBTITLE": "Create custom dashboards by dragging insights",
+    "AVAILABLE_INSIGHTS": "Available Insights",
+    "YOUR_DASHBOARD": "Your Custom Dashboard",
+    "DRAG_INSTRUCTION": "Drag insights from the left to build your dashboard",
+    "EMPTY_DASHBOARD": "Your dashboard is empty. Start by dragging insights from the left panel.",
+    "SAVE_DASHBOARD": "Save Dashboard",
+    "RESET_DASHBOARD": "Reset Dashboard",
+    "DASHBOARD_SAVED": "Dashboard saved successfully!",
+    "REMOVE_CARD": "Remove card"
+  },
+  "TRAIL": {
+    "TITLE": "Exploration Trail",
+    "SUBTITLE": "Your journey through the logistics data analysis",
+    "CURRENT_LOCATION": "Current Location",
+    "VISIT_AGAIN": "Visit Again",
+    "STEP_COUNT": "{{current}} of {{total}} steps",
+    "EMPTY_TRAIL": "Your exploration trail is empty. Start by uploading data or visiting the dashboard.",
+    "CLEAR_TRAIL": "Clear Trail",
+    "TRAIL_CLEARED": "Trail cleared successfully!"
+  },
+  "AGENT": {
+    "TITLE": "AI Logistics Assistant",
+    "SUBTITLE": "Ask me anything about your logistics data and operations",
+    "PLACEHOLDER": "Ask about your logistics data, KPIs, or operational insights...",
+    "SEND": "Send",
+    "THINKING": "Thinking...",
+    "EMPTY_CONVERSATION": "Start a conversation with your AI logistics assistant",
+    "SUGGESTIONS": {
+      "TITLE": "Try asking about:",
+      "ITEMS": [
+        "What are my top performing routes?",
+        "Which orders experienced the most delays?",
+        "How can I optimize my delivery costs?",
+        "What patterns do you see in my logistics data?"
+      ]
+    },
+    "RESPONSES": {
+      "PERFORMANCE": "Based on your logistics data, I can see several performance patterns. Your average delivery time is {{time}} days, with {{percentage}}% of orders delivered on time. The most efficient routes are those serving {{regions}}.",
+      "COSTS": "Your cost analysis shows total logistics expenses of {{cost}}. The average cost per order is {{avgCost}}, with the highest costs typically associated with {{factors}}.",
+      "DELAYS": "Delay analysis indicates a {{rate}}% delay rate across all shipments. The average delay duration is {{duration}} days, with peak delays occurring during {{periods}}.",
+      "ROUTES": "Your route optimization data shows {{routeCount}} active routes with an average efficiency of {{efficiency}}%. The most cost-effective routes are {{topRoutes}}.",
+      "DEFAULT": "I'd be happy to help you analyze your logistics data! I can provide insights on performance metrics, cost analysis, delay patterns, and route optimization. What specific aspect would you like to explore?"
+    }
+  },
+  "NAVIGATION": {
+    "DASHBOARD": "Dashboard",
+    "UPLOAD": "Upload",
+    "EXPLORE": "Explore",
+    "EXPLORER": "Explorer", 
+    "BUILDER": "Builder",
+    "TRAIL": "Trail",
+    "AGENT": "AI Agent"
+  },
+  "ERRORS": {
+    "FILE_TOO_LARGE": "File is too large. Maximum size is 50MB.",
+    "INVALID_FORMAT": "Invalid file format. Please upload CSV or Excel files.",
+    "UPLOAD_FAILED": "Upload failed. Please try again.",
+    "NETWORK_ERROR": "Network error. Please check your connection.",
+    "GENERIC_ERROR": "An error occurred. Please try again.",
+    "DATA_NOT_FOUND": "Data not found.",
+    "PROCESSING_ERROR": "Error processing data."
+  }
+} 

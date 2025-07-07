@@ -1,0 +1,193 @@
+{
+  "COMMON": {
+    "MAIN_PAGE": "Strona Główna",
+    "LOADING": "Ładowanie",
+    "UPLOADING": "Przesyłanie",
+    "PROCESSING": "Przetwarzanie",
+    "ANALYZING": "Analizowanie",
+    "COMPLETE": "Ukończone",
+    "CLOSE": "Zamknij",
+    "CANCEL": "Anuluj",
+    "SAVE": "Zapisz",
+    "DELETE": "Usuń",
+    "EDIT": "Edytuj",
+    "ADD": "Dodaj",
+    "REMOVE": "Usuń",
+    "SELECT_ALL": "Zaznacz Wszystko",
+    "CLEAR_ALL": "Wyczyść Wszystko",
+    "SEARCH": "Szukaj",
+    "FILTER": "Filtruj",
+    "SORT": "Sortuj",
+    "VIEW": "Pokaż",
+    "DOWNLOAD": "Pobierz",
+    "EXPORT": "Eksportuj",
+    "IMPORT": "Importuj",
+    "BACK": "Wstecz",
+    "NEXT": "Dalej",
+    "PREVIOUS": "Poprzedni",
+    "HOME": "Strona Główna",
+    "SETTINGS": "Ustawienia",
+    "HELP": "Pomoc",
+    "ABOUT": "O aplikacji",
+    "CONTACT": "Kontakt",
+    "PRIVACY": "Prywatność",
+    "TERMS": "Regulamin",
+    "ERROR": "Błąd",
+    "SUCCESS": "Sukces",
+    "WARNING": "Ostrzeżenie",
+    "INFO": "Informacja",
+    "CONTINUE": "Kontynuuj",
+    "THEME": "Motyw"
+  },
+  "MENU": {
+    "DASHBOARD": "Pulpit",
+    "UPLOAD": "Prześlij Dane",
+    "EXPLORER": "Eksplorator Danych",
+    "BUILDER": "Kreator Pulpitu",
+    "TRAIL": "Ślad Eksploracji",
+    "AGENT": "Agent AI",
+    "SECTIONS": {
+      "MAIN": "Główne",
+      "TOOLS": "Narzędzia"
+    }
+  },
+  "UPLOAD": {
+    "TITLE": "Prześlij Dane Logistyczne",
+    "SUBTITLE": "Upuść pliki CSV tutaj lub kliknij, aby przeglądać",
+    "FORMATS": "Obsługiwane formaty: CSV, Excel (.xlsx)",
+    "MAX_SIZE": "Maksymalny rozmiar pliku: 50MB",
+    "DROP_ZONE": "Upuść pliki tutaj...",
+    "BROWSE": "Przeglądaj Pliki",
+    "SELECTED_FILES": "Wybrane Pliki",
+    "FILE_COUNT": "Wybrano {{count}} plik(ów)",
+    "UPLOAD_BUTTON": "Prześlij Pliki",
+    "UPLOADING": "Przesyłanie...",
+    "SUCCESS": "Pliki przesłane pomyślnie!",
+    "ERROR": "Przesyłanie nie powiodło się. Spróbuj ponownie.",
+    "REMOVE_FILE": "Usuń plik"
+  },
+  "LOADING": {
+    "TITLE": "Przetwarzanie Danych",
+    "SUBTITLE": "Proszę czekać, analizujemy Twoje dane logistyczne...",
+    "STEPS": {
+      "UPLOADING": "Przesyłanie plików",
+      "PARSING": "Analiza struktury danych",
+      "VALIDATING": "Walidacja jakości danych",
+      "ANALYZING": "Wykonywanie wstępnej analizy",
+      "GENERATING": "Generowanie analiz",
+      "FINALIZING": "Finalizowanie pulpitu"
+    },
+    "PROGRESS": "{{percent}}% ukończone",
+    "ESTIMATED_TIME": "Szacowany czas pozostały: {{time}}"
+  },
+  "DASHBOARD": {
+    "TITLE": "Pulpit Analiz Logistycznych",
+    "SUBTITLE": "Przegląd operacji logistycznych",
+    "EXPLORE_BUTTON": "Eksploruj Szczegółowo",
+    "VIEW_ALL": "Pokaż Wszystko",
+    "REFRESH": "Odśwież Dane",
+    "LAST_UPDATED": "Ostatnia aktualizacja: {{time}}",
+    "CATEGORIES": {
+      "PERFORMANCE": "Metryki Wydajności",
+      "COSTS": "Analiza Kosztów",
+      "DELAYS": "Analiza Opóźnień",
+      "ROUTES": "Optymalizacja Tras"
+    },
+    "INSIGHTS": {
+      "TOTAL_ORDERS": "Łączna Liczba Zamówień",
+      "AVG_DELIVERY_TIME": "Średni Czas Dostawy",
+      "TOTAL_COST": "Łączny Koszt",
+      "COST_PER_ORDER": "Koszt na Zamówienie",
+      "DELAY_RATE": "Wskaźnik Opóźnień",
+      "AVG_DELAY": "Średnie Opóźnienie",
+      "TOTAL_ROUTES": "Łączna Liczba Tras",
+      "ROUTE_EFFICIENCY": "Efektywność Tras"
+    }
+  },
+  "EXPLORE": {
+    "TITLE": "Szczegółowa Analiza",
+    "BREADCRUMB_HOME": "Pulpit",
+    "BACK_TO_DASHBOARD": "Powrót do Pulpitu",
+    "DRILL_DOWN": "Zagłęb się Dalej",
+    "VIEW_RAW_DATA": "Pokaż Surowe Dane"
+  },
+  "EXPLORER": {
+    "TITLE": "Eksplorator Danych",
+    "SUBTITLE": "Przeglądaj i filtruj surowe dane logistyczne",
+    "SEARCH_PLACEHOLDER": "Szukaj we wszystkich kolumnach...",
+    "FILTER_BY": "Filtruj według",
+    "SHOW_FILTERS": "Pokaż Filtry",
+    "HIDE_FILTERS": "Ukryj Filtry",
+    "CLEAR_FILTERS": "Wyczyść Wszystkie Filtry",
+    "ROWS_PER_PAGE": "Wierszy na stronę",
+    "TOTAL_ROWS": "Łącznie: {{count}} wierszy",
+    "NO_DATA": "Brak dostępnych danych",
+    "LOADING_DATA": "Ładowanie danych...",
+    "EXPORT_CSV": "Eksportuj jako CSV",
+    "EXPORT_EXCEL": "Eksportuj jako Excel"
+  },
+  "BUILDER": {
+    "TITLE": "Kreator Pulpitu",
+    "SUBTITLE": "Twórz niestandardowe pulpity przeciągając analizy",
+    "AVAILABLE_INSIGHTS": "Dostępne Analizy",
+    "YOUR_DASHBOARD": "Twój Niestandardowy Pulpit",
+    "DRAG_INSTRUCTION": "Przeciągnij analizy z lewej strony, aby zbudować pulpit",
+    "EMPTY_DASHBOARD": "Twój pulpit jest pusty. Zacznij od przeciągnięcia analiz z lewego panelu.",
+    "SAVE_DASHBOARD": "Zapisz Pulpit",
+    "RESET_DASHBOARD": "Resetuj Pulpit",
+    "DASHBOARD_SAVED": "Pulpit zapisany pomyślnie!",
+    "REMOVE_CARD": "Usuń kartę"
+  },
+  "TRAIL": {
+    "TITLE": "Ślad Eksploracji",
+    "SUBTITLE": "Twoja podróż przez analizę danych logistycznych",
+    "CURRENT_LOCATION": "Obecna Lokalizacja",
+    "VISIT_AGAIN": "Odwiedź Ponownie",
+    "STEP_COUNT": "{{current}} z {{total}} kroków",
+    "EMPTY_TRAIL": "Twój ślad eksploracji jest pusty. Zacznij od przesłania danych lub odwiedzenia pulpitu.",
+    "CLEAR_TRAIL": "Wyczyść Ślad",
+    "TRAIL_CLEARED": "Ślad wyczyszczony pomyślnie!"
+  },
+  "AGENT": {
+    "TITLE": "Asystent Logistyczny AI",
+    "SUBTITLE": "Zadawaj pytania o dane logistyczne i operacje",
+    "PLACEHOLDER": "Zapytaj o dane logistyczne, KPI lub operacyjne spostrzeżenia...",
+    "SEND": "Wyślij",
+    "THINKING": "Myślę...",
+    "EMPTY_CONVERSATION": "Rozpocznij rozmowę z asystentem logistycznym AI",
+    "SUGGESTIONS": {
+      "TITLE": "Spróbuj zapytać o:",
+      "ITEMS": [
+        "Jakie są moje najlepiej działające trasy?",
+        "Które zamówienia miały największe opóźnienia?",
+        "Jak mogę zoptymalizować koszty dostaw?",
+        "Jakie wzorce widzisz w moich danych logistycznych?"
+      ]
+    },
+    "RESPONSES": {
+      "PERFORMANCE": "Na podstawie Twoich danych logistycznych widzę kilka wzorców wydajności. Średni czas dostawy to {{time}} dni, z {{percentage}}% zamówień dostarczonych na czas. Najbardziej efektywne trasy to te obsługujące {{regions}}.",
+      "COSTS": "Analiza kosztów pokazuje łączne wydatki logistyczne w wysokości {{cost}}. Średni koszt na zamówienie to {{avgCost}}, przy czym najwyższe koszty są zazwyczaj związane z {{factors}}.",
+      "DELAYS": "Analiza opóźnień wskazuje na {{rate}}% wskaźnik opóźnień we wszystkich przesyłkach. Średni czas opóźnienia to {{duration}} dni, z największymi opóźnieniami występującymi podczas {{periods}}.",
+      "ROUTES": "Dane optymalizacji tras pokazują {{routeCount}} aktywnych tras o średniej efektywności {{efficiency}}%. Najbardziej opłacalne trasy to {{topRoutes}}.",
+      "DEFAULT": "Chętnie pomogę Ci przeanalizować dane logistyczne! Mogę dostarczyć spostrzeżenia na temat metryk wydajności, analizy kosztów, wzorców opóźnień i optymalizacji tras. Jaki konkretny aspekt chciałbyś zbadać?"
+    }
+  },
+  "NAVIGATION": {
+    "DASHBOARD": "Pulpit",
+    "UPLOAD": "Prześlij",
+    "EXPLORE": "Eksploruj",
+    "EXPLORER": "Eksplorator",
+    "BUILDER": "Kreator",
+    "TRAIL": "Ślad",
+    "AGENT": "Agent AI"
+  },
+  "ERRORS": {
+    "FILE_TOO_LARGE": "Plik jest za duży. Maksymalny rozmiar to 50MB.",
+    "INVALID_FORMAT": "Nieprawidłowy format pliku. Prześlij pliki CSV lub Excel.",
+    "UPLOAD_FAILED": "Przesyłanie nie powiodło się. Spróbuj ponownie.",
+    "NETWORK_ERROR": "Błąd sieci. Sprawdź połączenie internetowe.",
+    "GENERIC_ERROR": "Wystąpił błąd. Spróbuj ponownie.",
+    "DATA_NOT_FOUND": "Nie znaleziono danych.",
+    "PROCESSING_ERROR": "Błąd przetwarzania danych."
+  }
+} 
