@@ -3,6 +3,7 @@ import { Box, Typography, Grid, Fade, Collapse, Card, alpha, IconButton } from '
 import { Close } from '@mui/icons-material'
 import { ExplorationTile } from '../../store/appState'
 import { ExplorationTileCard } from './ExplorationTileCard'
+import { CustomQueryTile } from './CustomQueryTile'
 
 interface ExplorationLayerProps {
   layerIndex: number
@@ -11,6 +12,11 @@ interface ExplorationLayerProps {
   activeTileId: string | null
   onTileClick: (tileId: string, layerIndex: number) => void
   onLayerClose: (layerIndex: number) => void
+  onCustomQuery: (query: string, layerIndex: number) => void
+  onCustomQuerySelect: (layerIndex: number) => void
+  onCustomQueryExpand?: (layerIndex: number, expanded: boolean) => void
+  isCustomQuerySelected?: (layerIndex: number) => boolean
+  shouldCollapseTiles?: boolean
 }
 
 export const ExplorationLayer: React.FC<ExplorationLayerProps> = ({ 
@@ -19,7 +25,12 @@ export const ExplorationLayer: React.FC<ExplorationLayerProps> = ({
   tiles,
   activeTileId,
   onTileClick,
-  onLayerClose
+  onLayerClose,
+  onCustomQuery,
+  onCustomQuerySelect,
+  onCustomQueryExpand,
+  isCustomQuerySelected,
+  shouldCollapseTiles = false
 }) => {
   // Dynamic layer titles based on the layer index
   const getLayerTitle = (index: number): string => {
@@ -59,22 +70,38 @@ export const ExplorationLayer: React.FC<ExplorationLayerProps> = ({
       <Box sx={{ mb: 4 }}>
         {shouldShowTiles ? (
           // Show actual tiles
-          <Grid container spacing={3}>
+          <Box sx={{ display: 'flex', gap: 3, alignItems: 'stretch' }}>
             {tiles.map((tile, index) => (
-              <Grid item xs={12} sm={6} lg={3} key={tile.id}>
+              <Box key={tile.id} sx={{ 
+                flex: shouldCollapseTiles ? '0 0 80px' : '1 1 calc(25% - 44px)', 
+                minWidth: shouldCollapseTiles ? 80 : 200 
+              }}>
                 <Fade in timeout={300 + index * 100}>
-                  <Box data-tile-id={tile.id} sx={{ position: 'relative' }}>
+                  <Box data-tile-id={tile.id} sx={{ position: 'relative', height: '100%' }}>
                     <ExplorationTileCard
                       tile={tile}
                       onClick={() => onTileClick(tile.id, layerIndex)}
                       isSubLevel={layerIndex > 0}
                       isActive={activeTileId === tile.id}
+                      isCollapsed={shouldCollapseTiles}
                     />
                   </Box>
                 </Fade>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+            
+            {/* Custom Query Tile for Layer */}
+            <Box sx={{ flex: shouldCollapseTiles ? '1 1 auto' : '0 0 80px' }}>
+              <CustomQueryTile
+                onCustomQuery={(query) => onCustomQuery(query, layerIndex)}
+                onSelect={() => onCustomQuerySelect(layerIndex)}
+                onExpand={(expanded) => onCustomQueryExpand?.(layerIndex, expanded)}
+                level={layerIndex}
+                isSelected={isCustomQuerySelected ? isCustomQuerySelected(layerIndex) : activeTileId === `custom-query-layer-${layerIndex}`}
+                fadeDelay={tiles.length * 100}
+              />
+            </Box>
+          </Box>
         ) : (
           // Show placeholder
           <Card

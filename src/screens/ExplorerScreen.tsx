@@ -18,7 +18,7 @@ type ViewMode = 'grid' | 'wizard'
 export const ExplorerScreen: React.FC = () => {
   const { t } = useTypedTranslation()
   const [viewMode, setViewMode] = useState<ViewMode>('wizard')
-  
+
   const {
     currentPath,
     currentLevel,
@@ -34,7 +34,7 @@ export const ExplorerScreen: React.FC = () => {
   const explorationLayers = useExplorationLayers({ maxLayers: 6 })
 
   // Stable insights with debouncing
-  const [stableInsights, setStableInsights] = useState(() => 
+  const [stableInsights, setStableInsights] = useState(() =>
     generateDynamicInsights(null, [], [])
   )
   const [insightsUpdateTimeoutId, setInsightsUpdateTimeoutId] = useState<NodeJS.Timeout | null>(null)
@@ -116,7 +116,7 @@ export const ExplorerScreen: React.FC = () => {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header with Toggle */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box sx={{ flex: 1 }}>
           <ExplorationHeader
             title={t('EXPLORER.TITLE')}
@@ -201,4 +201,4 @@ export const ExplorerScreen: React.FC = () => {
       )}
     </Container>
   )
-} 
+}

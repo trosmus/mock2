@@ -1,10 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Box, Grid, Fade, Button, Typography, alpha } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import { ExplorationTile } from '../../store/appState'
 import { ExplorationTileCard } from './ExplorationTileCard'
 import { ExplorationLayer } from './ExplorationLayer'
 import { ExplorationConnectionPath } from './ExplorationConnectionPath'
+import { CustomQueryTile } from './CustomQueryTile'
 import { useExplorationLayers } from './useExplorationLayers'
 
 interface ExplorationGridProps {
@@ -32,6 +33,12 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   
+  // State to track expanded tiles in each row/layer
+  const [expandedTilePerLayer, setExpandedTilePerLayer] = useState<{ [key: string]: 'custom-query' | null }>({
+    root: null,
+    ...Object.fromEntries(Array.from({ length: 6 }, (_, i) => [i.toString(), null]))
+  })
+  
   // Use the passed exploration layers state
   const {
     visibleLayers,
@@ -42,12 +49,18 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
     showLayer,
     hideLayer,
     getNextExpandableLayer,
-    currentRootSelection
+    currentRootSelection,
+    handleRootCustomQuerySelection,
+    handleLayerCustomQuerySelection,
+    getCustomQuerySelection,
+    isCustomQuerySelected
   } = explorationLayers
 
   // Get the active root tile color for the connection line
   const activeRootTile = rootTiles.find(tile => tile.id === currentRootSelection)
-  const connectionColor = activeRootTile?.color || '#06b6d4'
+  const connectionColor = currentRootSelection === 'custom-query' 
+    ? '#8b5cf6' // Purple color for custom queries
+    : activeRootTile?.color || '#06b6d4'
 
   // Handle root tile clicks with proper layer management
   const handleRootTileClick = (tileId: string) => {
@@ -76,6 +89,49 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
     }
   }
 
+  // Handle custom query for root level
+  const handleRootCustomQuery = (query: string) => {
+    handleRootCustomQuerySelection(query)
+  }
+
+  // Handle custom query tile selection for root level
+  const handleRootCustomQuerySelect = () => {
+    // For grid mode, we'll trigger custom query selection with a default query
+    handleRootCustomQuerySelection('Custom exploration query')
+  }
+
+  // Handle custom query for layers
+  const handleLayerCustomQuery = (query: string, layerIndex: number) => {
+    handleLayerCustomQuerySelection(query, layerIndex)
+  }
+
+  // Handle custom query tile selection for layers
+  const handleLayerCustomQuerySelect = (layerIndex: number) => {
+    // For grid mode, we'll trigger custom query selection with a default query
+    handleLayerCustomQuerySelection('Custom exploration query', layerIndex)
+  }
+
+  // Handle custom query expansion for root level
+  const handleRootCustomQueryExpand = (expanded: boolean) => {
+    setExpandedTilePerLayer(prev => ({
+      ...prev,
+      root: expanded ? 'custom-query' : null
+    }))
+  }
+
+  // Handle custom query expansion for layers
+  const handleLayerCustomQueryExpand = (layerIndex: number, expanded: boolean) => {
+    setExpandedTilePerLayer(prev => ({
+      ...prev,
+      [layerIndex.toString()]: expanded ? 'custom-query' : null
+    }))
+  }
+
+  // Check if regular tiles should be collapsed in a specific layer
+  const shouldCollapseTiles = (layerKey: string): boolean => {
+    return expandedTilePerLayer[layerKey] === 'custom-query'
+  }
+
   // Get layer titles for the expand button
   const getLayerTitle = (index: number): string => {
     return 'Explore More'
@@ -86,21 +142,39 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
   return (
     <Box ref={containerRef} sx={{ mb: 6, position: 'relative' }}>
       {/* Root Level - Always Visible */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        {rootTiles.map((tile, index) => (
-          <Grid item xs={12} sm={6} lg={3} key={tile.id}>
-            <Fade in timeout={300 + index * 100}>
-              <div data-tile-id={tile.id}>
-                <ExplorationTileCard
-                  tile={tile}
-                  onClick={() => handleRootTileClick(tile.id)}
-                  isActive={currentRootSelection === tile.id}
-                />
-              </div>
-            </Fade>
-          </Grid>
-        ))}
-      </Grid>
+      <Box sx={{ mb: 3 }}>
+        <Box sx={{ display: 'flex', gap: 3, alignItems: 'stretch' }}>
+          {rootTiles.map((tile, index) => (
+            <Box key={tile.id} sx={{ 
+              flex: shouldCollapseTiles('root') ? '0 0 80px' : '1 1 calc(25% - 44px)', 
+              minWidth: shouldCollapseTiles('root') ? 80 : 200 
+            }}>
+              <Fade in timeout={300 + index * 100}>
+                <Box data-tile-id={tile.id} sx={{height: '100%'}}>
+                  <ExplorationTileCard
+                    tile={tile}
+                    onClick={() => handleRootTileClick(tile.id)}
+                    isActive={currentRootSelection === tile.id}
+                    isCollapsed={shouldCollapseTiles('root')}
+                  />
+                </Box>
+              </Fade>
+            </Box>
+          ))}
+          
+          {/* Custom Query Tile for Root Level */}
+          <Box sx={{ flex: shouldCollapseTiles('root') ? '1 1 auto' : '0 0 80px' }}>
+            <CustomQueryTile
+              onCustomQuery={handleRootCustomQuery}
+              onSelect={handleRootCustomQuerySelect}
+              onExpand={handleRootCustomQueryExpand}
+              level="root"
+              isSelected={isCustomQuerySelected(-1)}
+              fadeDelay={rootTiles.length * 100}
+            />
+          </Box>
+        </Box>
+      </Box>
 
       {/* Dynamic Exploration Layers */}
       {Array.from({ length: 6 }, (_, layerIndex) => (
@@ -112,6 +186,11 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
           activeTileId={activeTilePerLayer[layerIndex]}
           onTileClick={handleLayerTileClick}
           onLayerClose={handleLayerClose}
+          onCustomQuery={handleLayerCustomQuery}
+          onCustomQuerySelect={handleLayerCustomQuerySelect}
+          onCustomQueryExpand={handleLayerCustomQueryExpand}
+          isCustomQuerySelected={isCustomQuerySelected}
+          shouldCollapseTiles={shouldCollapseTiles(layerIndex.toString())}
         />
       ))}
 

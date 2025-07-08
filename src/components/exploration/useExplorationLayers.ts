@@ -22,6 +22,12 @@ export const useExplorationLayers = ({
   // We need to track root selection separately from layer selections
   const [currentRootSelection, setCurrentRootSelection] = useState<string | null>(null)
 
+  // Track custom query selections per layer
+  const [customQueryPerLayer, setCustomQueryPerLayer] = useState<(string | null)[]>(() => 
+    Array(maxLayers).fill(null)
+  )
+  const [rootCustomQuery, setRootCustomQuery] = useState<string | null>(null)
+
   // Cache for generated tiles to ensure stability
   const tileCache = useRef<Map<string, ExplorationTile[]>>(new Map())
 
@@ -67,6 +73,11 @@ export const useExplorationLayers = ({
         
         // Extract category from root selection
         const extractCategory = (tileId: string): keyof typeof CATEGORIES => {
+          // Handle custom query tiles
+          if (tileId.startsWith('custom-query-')) {
+            return rootCategory // Use default root category for custom queries
+          }
+          
           const parts = tileId.split('-')
           const potentialCategory = parts[0]
           
@@ -115,6 +126,11 @@ export const useExplorationLayers = ({
       
       // Extract category from parent tile ID with fallbacks
       const extractCategory = (tileId: string): keyof typeof CATEGORIES => {
+        // Handle custom query tiles
+        if (tileId.startsWith('custom-query-')) {
+          return rootCategory // Use default root category for custom queries
+        }
+        
         const parts = tileId.split('-')
         const potentialCategory = parts[0]
         
@@ -311,8 +327,87 @@ export const useExplorationLayers = ({
     setVisibleLayers(Array(maxLayers).fill(false))
     setActiveTilePerLayer(Array(maxLayers).fill(null))
     setCurrentRootSelection(null)
+    setCustomQueryPerLayer(Array(maxLayers).fill(null))
+    setRootCustomQuery(null)
     tileCache.current.clear()
   }, [maxLayers])
+
+  // Handle root custom query selection
+  const handleRootCustomQuerySelection = useCallback((query: string) => {
+    setRootCustomQuery(query)
+    setCurrentRootSelection('custom-query')
+    // Clear all layer selections
+    setActiveTilePerLayer(Array(maxLayers).fill(null))
+    setCustomQueryPerLayer(Array(maxLayers).fill(null))
+    // Show layer 0 when root custom query is selected
+    setVisibleLayers(prev => {
+      const newVisibleLayers = Array(maxLayers).fill(false)
+      newVisibleLayers[0] = true
+      return newVisibleLayers
+    })
+    // Clear tile cache
+    tileCache.current.clear()
+  }, [maxLayers])
+
+  // Handle layer custom query selection
+  const handleLayerCustomQuerySelection = useCallback((query: string, layerIndex: number) => {
+    if (layerIndex < 0 || layerIndex >= maxLayers) {
+      return
+    }
+
+    setCustomQueryPerLayer(prev => {
+      const newCustomQueries = [...prev]
+      newCustomQueries[layerIndex] = query
+      // Clear all subsequent layers
+      for (let i = layerIndex + 1; i < maxLayers; i++) {
+        newCustomQueries[i] = null
+      }
+      return newCustomQueries
+    })
+
+    setActiveTilePerLayer(prev => {
+      const newActiveTiles = [...prev]
+      newActiveTiles[layerIndex] = 'custom-query'
+      // Clear all subsequent layers
+      for (let i = layerIndex + 1; i < maxLayers; i++) {
+        newActiveTiles[i] = null
+      }
+      return newActiveTiles
+    })
+
+    // Hide layers beyond the immediate next one
+    setVisibleLayers(prev => {
+      const newVisibleLayers = [...prev]
+      for (let i = layerIndex + 2; i < maxLayers; i++) {
+        newVisibleLayers[i] = false
+      }
+      return newVisibleLayers
+    })
+  }, [maxLayers])
+
+  // Get custom query selection for a specific layer
+  const getCustomQuerySelection = useCallback((layerIndex: number): string | null => {
+    if (layerIndex === -1) {
+      // Root level
+      return rootCustomQuery
+    }
+    if (layerIndex < 0 || layerIndex >= maxLayers) {
+      return null
+    }
+    return customQueryPerLayer[layerIndex]
+  }, [rootCustomQuery, customQueryPerLayer, maxLayers])
+
+  // Check if custom query is selected for a specific layer
+  const isCustomQuerySelected = useCallback((layerIndex: number): boolean => {
+    if (layerIndex === -1) {
+      // Root level
+      return currentRootSelection === 'custom-query' && rootCustomQuery !== null
+    }
+    if (layerIndex < 0 || layerIndex >= maxLayers) {
+      return false
+    }
+    return activeTilePerLayer[layerIndex] === 'custom-query' && customQueryPerLayer[layerIndex] !== null
+  }, [currentRootSelection, rootCustomQuery, activeTilePerLayer, customQueryPerLayer, maxLayers])
 
   return {
     visibleLayers,
@@ -324,6 +419,10 @@ export const useExplorationLayers = ({
     hideLayer,
     getNextExpandableLayer,
     resetLayers,
-    currentRootSelection
+    currentRootSelection,
+    handleRootCustomQuerySelection,
+    handleLayerCustomQuerySelection,
+    getCustomQuerySelection,
+    isCustomQuerySelected
   }
 } 

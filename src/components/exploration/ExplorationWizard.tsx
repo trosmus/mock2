@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { Box, Typography, Grid, Button, IconButton, Fade, Breadcrumbs, Link, alpha } from '@mui/material'
-import { ArrowBack, ArrowForward, Home, Explore } from '@mui/icons-material'
+import { Box, Typography, Grid, Button, IconButton, Fade, Breadcrumbs, Link, alpha, TextField, Chip, Card, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import { ArrowBack, ArrowForward, Home, Explore, Create, ExpandMore } from '@mui/icons-material'
 import { ExplorationTile } from '../../store/appState'
 import { ExplorationTileCard } from './ExplorationTileCard'
 import { useExplorationLayers } from './useExplorationLayers'
@@ -28,10 +28,6 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
   onTileClick,
   explorationLayers
 }) => {
-  // Remove independent state - derive from shared exploration state
-  const [selectedTileId, setSelectedTileId] = useState<string | null>(null) // Track selected tile without navigation
-  const previousStepRef = useRef<number>(-1)
-  
   // Extract state from explorationLayers
   const {
     currentRootSelection,
@@ -42,9 +38,21 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
     handleRootTileSelection,
     showLayer,
     hideLayer,
-    resetLayers
+    resetLayers,
+    handleRootCustomQuerySelection,
+    handleLayerCustomQuerySelection,
+    getCustomQuerySelection,
+    isCustomQuerySelected
   } = explorationLayers
 
+  // Remove independent state - derive from shared exploration state
+  const [selectedTileId, setSelectedTileId] = useState<string | null>(null) // Track selected tile without navigation
+  const previousStepRef = useRef<number>(-1)
+  
+  // Custom prompt state - only for UI display, actual selection goes to shared state
+  const [showCustomPrompt, setShowCustomPrompt] = useState<boolean>(false)
+  const [customPrompt, setCustomPrompt] = useState<string>('')
+  
   // Derive current step from shared exploration state
   const getCurrentStep = useCallback((): number => {
     // Step 0 = root level (no root selection or selecting root)
@@ -120,12 +128,30 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
   // Get active tile for current level from shared state
   const getCurrentActiveTile = useCallback((): string | null => {
     if (currentStep === 0) {
+      // Check if custom query is selected at root level
+      if (isCustomQuerySelected(-1)) {
+        return 'custom-query'
+      }
       return selectedTileId || currentRootSelection
     } else {
       const layerIndex = currentStep - 1
+      // Check if custom query is selected at this layer
+      if (isCustomQuerySelected(layerIndex)) {
+        return 'custom-query'
+      }
       return selectedTileId || activeTilePerLayer[layerIndex]
     }
-  }, [currentStep, selectedTileId, currentRootSelection, activeTilePerLayer])
+  }, [currentStep, selectedTileId, currentRootSelection, activeTilePerLayer, isCustomQuerySelected])
+
+  // Get current custom query text if selected
+  const getCurrentCustomQuery = useCallback((): string | null => {
+    if (currentStep === 0) {
+      return getCustomQuerySelection(-1)
+    } else {
+      const layerIndex = currentStep - 1
+      return getCustomQuerySelection(layerIndex)
+    }
+  }, [currentStep, getCustomQuerySelection])
 
   // Create breadcrumb path
   const path = [{ label: 'Home', onClick: () => goToStep(0) }]
@@ -174,42 +200,88 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
 
   // Handle explore button click (actual navigation using shared state)
   const handleExploreClick = useCallback(() => {
-    if (!selectedTileId) return
-    
-    if (currentStep === 0) {
-      // Root level selection
-      handleRootTileSelection(selectedTileId)
-    } else {
-      // Layer selection
-      const layerIndex = currentStep - 1
-      handleTileSelection(selectedTileId, layerIndex)
+    // Prioritize custom prompt if it has content
+    if (showCustomPrompt && customPrompt.trim()) {
+      // Handle custom prompt exploration using shared state
+      if (currentStep === 0) {
+        handleRootCustomQuerySelection(customPrompt.trim())
+      } else {
+        const layerIndex = currentStep - 1
+        handleLayerCustomQuerySelection(customPrompt.trim(), layerIndex)
+      }
+      
+      // Clear UI state after exploration
+      setCustomPrompt('')
+      setShowCustomPrompt(false)
+      setSelectedTileId(null)
+    } else if (selectedTileId === 'custom-query') {
+      // Handle custom query selection (with custom prompt if available)
+      const queryText = customPrompt.trim() || 'Custom exploration query'
+      if (currentStep === 0) {
+        handleRootCustomQuerySelection(queryText)
+      } else {
+        const layerIndex = currentStep - 1
+        handleLayerCustomQuerySelection(queryText, layerIndex)
+      }
+      
+      // Clear selection and prompt after exploration
+      setSelectedTileId(null)
+      setCustomPrompt('')
+      setShowCustomPrompt(false)
+    } else if (selectedTileId) {
+      // Handle predefined tile exploration
+      if (currentStep === 0) {
+        // Root level selection
+        handleRootTileSelection(selectedTileId)
+      } else {
+        // Layer selection
+        const layerIndex = currentStep - 1
+        handleTileSelection(selectedTileId, layerIndex)
+      }
+      
+      // Clear selection after navigation
+      setSelectedTileId(null)
     }
-    
-    // Clear selection after navigation
-    setSelectedTileId(null)
-  }, [selectedTileId, currentStep, handleRootTileSelection, handleTileSelection])
+  }, [showCustomPrompt, customPrompt, selectedTileId, currentStep, handleRootTileSelection, handleTileSelection, handleRootCustomQuerySelection, handleLayerCustomQuerySelection])
+
+  // Get contextual prompt placeholder
+  const getPromptPlaceholder = useCallback((): string => {
+    if (currentStep === 0) {
+      return 'What aspect of your business would you like to explore? (e.g., "customer satisfaction trends", "seasonal revenue patterns")'
+    } else {
+      const currentTitle = getCurrentLevelTitle()
+      return `What specific aspect of ${currentTitle.toLowerCase()} would you like to explore?`
+    }
+  }, [currentStep, getCurrentLevelTitle])
+
+  // Get current values
+  const currentTiles = getCurrentLevelTiles()
+  const currentTitle = getCurrentLevelTitle()
+  const currentActiveTile = getCurrentActiveTile()
+  const currentCustomQuery = getCurrentCustomQuery()
+  const isCustomQueryActiveInSharedState = currentActiveTile === 'custom-query'
+  const breadcrumbPath = path
 
   // Check if we can go forward
   const canGoForward = useCallback((): boolean => {
-    if (!selectedTileId) return false
-    
-    // Always allow forward navigation if a tile is selected
-    // The actual tile generation and availability will be checked when exploring
-    return true
-  }, [selectedTileId])
+    // Allow forward if either custom prompt has content OR a tile is selected OR custom query is selected locally OR custom query is selected in shared state
+    return (showCustomPrompt && customPrompt.trim().length > 0) || selectedTileId !== null || isCustomQueryActiveInSharedState
+  }, [showCustomPrompt, customPrompt, selectedTileId, isCustomQueryActiveInSharedState])
 
   // Go to previous step using shared state
   const goBack = useCallback(() => {
     setSelectedTileId(null)
+    setCustomPrompt('')
+    setShowCustomPrompt(false)
     
     if (currentStep === 0) {
       // Already at root, nothing to do
       return
     } else if (currentStep === 1) {
-      // Go back to root selection - clear root selection
+      // Go back to root selection - clear root selection (including custom queries)
       resetLayers()
     } else {
-      // Go back one layer - hide the current layer
+      // Go back one layer - hide the current layer (this will also clear custom queries)
       const currentLayerIndex = currentStep - 1
       if (currentLayerIndex >= 0) {
         hideLayer(currentLayerIndex)
@@ -220,17 +292,33 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
   // Reset to beginning
   const resetWizard = useCallback(() => {
     setSelectedTileId(null)
+    setCustomPrompt('')
+    setShowCustomPrompt(false)
     resetLayers()
   }, [resetLayers])
 
-  const currentTiles = getCurrentLevelTiles()
-  const currentTitle = getCurrentLevelTitle()
-  const currentActiveTile = getCurrentActiveTile()
-  const breadcrumbPath = path
+  // Handle custom query toggle
+  const handleCustomQueryToggle = useCallback((event: React.SyntheticEvent, isExpanded: boolean) => {
+    setShowCustomPrompt(isExpanded)
+    if (isExpanded) {
+      // Populate with existing custom query text if available
+      const existingQuery = getCurrentCustomQuery()
+      if (existingQuery) {
+        setCustomPrompt(existingQuery)
+      }
+    } else {
+      // Only clear custom prompt when hiding the input
+      setCustomPrompt('')
+      // Clear custom query selection when accordion is collapsed
+      if (selectedTileId === 'custom-query') {
+        setSelectedTileId(null)
+      }
+    }
+  }, [selectedTileId, getCurrentCustomQuery])
 
   return (
     <Box sx={{ minHeight: '600px' }}>
-      {/* Current Level Tiles */}
+      {/* Always show predefined tiles */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {currentTiles.map((tile, index) => (
           <Grid item xs={12} sm={6} key={tile.id} sx={{ minHeight: 200 }}>
@@ -250,6 +338,160 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
           </Grid>
         ))}
       </Grid>
+
+      {/* Custom Query Tile with Accordion */}
+      <Card
+        elevation={0}
+        sx={(theme) => ({
+          mb: 4,
+          p: 2,
+          boxShadow: 'none',
+          borderRadius: 1,
+          background: (showCustomPrompt || selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState)
+            ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.08)}, ${alpha(theme.palette.primary.main, 0.04)})`
+            : theme.palette.background.paper,
+          cursor: 'pointer',
+          outline: (selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState)
+            ? `3px solid ${theme.palette.primary.main}`
+            : showCustomPrompt
+            ? `2px solid ${alpha(theme.palette.primary.main, 0.4)}`
+            : `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+          position: 'relative',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          '&:hover': {
+            outline: (selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState)
+              ? `3px solid ${theme.palette.primary.main}`
+              : `2px solid ${alpha(theme.palette.primary.main, 0.6)}`,
+            outlineOffset: '-2px',
+            background: (showCustomPrompt || selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState)
+              ? `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.12)}, ${alpha(theme.palette.primary.main, 0.06)})`
+              : `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.04)}, ${alpha(theme.palette.primary.main, 0.02)})`,
+          },
+        })}
+      >
+        <Accordion
+          expanded={showCustomPrompt || isCustomQueryActiveInSharedState}
+          onChange={handleCustomQueryToggle}
+          elevation={0}
+          sx={{
+            boxShadow: 'none',
+            backgroundColor: 'transparent',
+            '&:before': {
+              display: 'none',
+            },
+            '& .MuiAccordionSummary-root': {
+              p: 0,
+              minHeight: 'auto',
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+              '& .MuiAccordionSummary-expandIconWrapper': {
+                color: 'primary.main',
+              },
+            },
+            '& .MuiAccordionDetails-root': {
+              p: 0,
+              pt: 2,
+              backgroundColor: 'transparent',
+            },
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            sx={{
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
+              <Box
+                sx={(theme) => ({
+                  p: 1.25,
+                  borderRadius: 1,
+                  background: (showCustomPrompt || selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState) ? theme.palette.primary.main : alpha(theme.palette.primary.main, 0.15),
+                  color: (showCustomPrompt || selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState) ? theme.palette.primary.contrastText : theme.palette.primary.main,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s ease',
+                })}
+              >
+                <Create />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  variant="body2"
+                  color={(showCustomPrompt || selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState) ? 'primary.main' : 'text.secondary'}
+                  sx={{
+                    fontWeight: (showCustomPrompt || selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState) ? 600 : 500,
+                    mb: 0.5,
+                    fontSize: '1rem',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  Custom Query
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.disabled"
+                  sx={{
+                    fontSize: '0.75rem',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Explore using your own custom prompt or question
+                </Typography>
+              </Box>
+            </Box>
+          </AccordionSummary>
+          
+          <AccordionDetails>
+            <Box sx={{ width: '100%'}}>
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder={getPromptPlaceholder()}
+                variant="outlined"
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                    fontSize: '1rem',
+                    '& fieldset': {
+                      borderColor: 'divider',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  },
+                }}
+              />
+              
+              {/* Select Button */}
+              <Button
+                variant="outlined"
+                onClick={() => setSelectedTileId('custom-query')}
+                disabled={selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState}
+                sx={{
+                  width: '100%',
+                  borderRadius: 1,
+                  fontSize: '0.875rem',
+                  py: 1,
+                }}
+              >
+                {(selectedTileId === 'custom-query' || isCustomQueryActiveInSharedState) ? 'Selected' : 'Select Custom Query'}
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </Card>
 
       {/* Navigation Controls */}
       <Box sx={{ 
@@ -275,21 +517,21 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
           Back
         </Button>
 
-        {/* Explore This Topic Button */}
+        {/* Explore Button */}
         <Button
           variant="contained"
           onClick={handleExploreClick}
-          disabled={!selectedTileId || !canGoForward()}
+          disabled={!canGoForward()}
           endIcon={<Explore />}
           sx={{
             minWidth: 180,
             height: 44,
             fontWeight: 600,
-            background: selectedTileId && canGoForward() 
+            background: canGoForward() 
               ? 'linear-gradient(135deg, #22c55e, #16a34a)'
               : undefined,
             '&:hover': {
-              background: selectedTileId && canGoForward() 
+              background: canGoForward() 
                 ? 'linear-gradient(135deg, #16a34a, #15803d)'
                 : undefined,
             },
@@ -299,9 +541,10 @@ export const ExplorationWizard: React.FC<ExplorationWizardProps> = ({
             }
           }}
         >
-          Explore This Topic
+          {selectedTileId === 'custom-query' ? 'Explore Custom Query' : 
+           (showCustomPrompt && customPrompt.trim()) ? 'Explore Custom Query' : 'Explore This Topic'}
         </Button>
       </Box>
     </Box>
   )
-} 
+}

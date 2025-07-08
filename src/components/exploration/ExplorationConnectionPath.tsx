@@ -34,6 +34,18 @@ export const ExplorationConnectionPath: React.FC<ExplorationConnectionPathProps>
     const getActiveConnections = () => {
       const connections: { fromId: string; toId: string }[] = []
       
+      // Helper function to convert state ID to display ID for custom queries
+      const getDisplayId = (stateId: string, isRoot: boolean = false, layerIndex?: number): string => {
+        if (stateId === 'custom-query') {
+          if (isRoot) {
+            return 'custom-query-root'
+          } else if (layerIndex !== undefined) {
+            return `custom-query-layer-${layerIndex}`
+          }
+        }
+        return stateId
+      }
+      
       // If we have the new layer system, use that
       if (activeTilePerLayer.length > 0 && visibleLayers.length > 0) {
         // First, check for connection from root tile to layer 0
@@ -41,7 +53,9 @@ export const ExplorationConnectionPath: React.FC<ExplorationConnectionPathProps>
           const layer0ActiveTile = activeTilePerLayer[0]
           if (layer0ActiveTile) {
             // Connection from root tile to active tile in layer 0
-            connections.push({ fromId: currentRootTileId, toId: layer0ActiveTile })
+            const fromDisplayId = getDisplayId(currentRootTileId, true)
+            const toDisplayId = getDisplayId(layer0ActiveTile, false, 0)
+            connections.push({ fromId: fromDisplayId, toId: toDisplayId })
           }
         }
         
@@ -52,13 +66,17 @@ export const ExplorationConnectionPath: React.FC<ExplorationConnectionPathProps>
           const nextTile = activeTilePerLayer[i + 1]
           
           if (currentTile && nextLayerVisible && nextTile) {
-            connections.push({ fromId: currentTile, toId: nextTile })
+            const fromDisplayId = getDisplayId(currentTile, false, i)
+            const toDisplayId = getDisplayId(nextTile, false, i + 1)
+            connections.push({ fromId: fromDisplayId, toId: toDisplayId })
           }
         }
       } else {
         // Fallback to the old system
         if (showSubTiles && currentRootTileId && currentSubTileId) {
-          connections.push({ fromId: currentRootTileId, toId: currentSubTileId })
+          const fromDisplayId = getDisplayId(currentRootTileId, true)
+          const toDisplayId = getDisplayId(currentSubTileId, false, 0)
+          connections.push({ fromId: fromDisplayId, toId: toDisplayId })
         }
       }
       
