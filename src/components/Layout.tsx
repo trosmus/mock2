@@ -26,11 +26,11 @@ export const Layout: React.FC = () => {
       <Box
         component="main"
         sx={{
-          pt: `${NAVBAR_HEIGHT + 16}px`, // Account for navbar height + padding
+          pt: '65px',
           flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
-          height: '100vh',
+          // height: '100vh',
           overflow: 'hidden',
           backgroundColor: theme.palette.background.default,
         }}
@@ -39,7 +39,7 @@ export const Layout: React.FC = () => {
           sx={{
             flex: 1,
             overflow: 'auto',
-            p: 3,
+            p: 1,
             '&::-webkit-scrollbar': {
               width: 8,
             },

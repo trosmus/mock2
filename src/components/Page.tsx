@@ -22,11 +22,10 @@ export const Page: React.FC<PageProps> = ({
   headerMarginBottom = 6
 }) => {
   return (
-    <Container 
-      maxWidth={maxWidth} 
-      sx={{ 
+    <Container
+      maxWidth={maxWidth}
+      sx={{
         py: 4,
-        minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -38,10 +37,10 @@ export const Page: React.FC<PageProps> = ({
         actions={actions}
         marginBottom={headerMarginBottom}
       />
-      
+
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {children}
       </Box>
     </Container>
   )
-} 
+}
