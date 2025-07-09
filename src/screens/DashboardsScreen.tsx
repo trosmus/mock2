@@ -408,9 +408,25 @@ export const DashboardsScreen: React.FC = () => {
 
   const handleLayoutChange = useCallback((newLayout: any[]) => {
     if (selectedDashboard && isEditMode) {
-      setSelectedDashboard(prev => prev ? { ...prev, layout: newLayout } : null)
+      setSelectedDashboard((prev: Dashboard | null) => prev ? { ...prev, layout: newLayout } : null)
+      // Also update the dashboards array
+      setDashboards(prev => prev.map(d => 
+        d.id === selectedDashboard.id 
+          ? { ...d, layout: newLayout }
+          : d
+      ))
     }
   }, [selectedDashboard, isEditMode])
+
+  const handleDashboardUpdate = useCallback((updatedDashboard: Dashboard) => {
+    setSelectedDashboard(updatedDashboard)
+    // Update the dashboards array
+    setDashboards(prev => prev.map(d => 
+      d.id === updatedDashboard.id 
+        ? updatedDashboard
+        : d
+    ))
+  }, [])
 
   const handleCreateDashboard = () => {
     // This would typically create a new dashboard
@@ -436,6 +452,7 @@ export const DashboardsScreen: React.FC = () => {
           onBack={handleBackToDashboards}
           onToggleEdit={handleToggleEdit}
           onLayoutChange={handleLayoutChange}
+          onDashboardUpdate={handleDashboardUpdate}
         />
       ) : (
         <Page

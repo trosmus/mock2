@@ -13,13 +13,17 @@ interface ExplorationInsightsProps {
   topRight: InsightData
   bottomLeft: InsightData
   bottomRight: InsightData
+  onAddToDashboard?: (insight: InsightData) => void
+  onAddToFavorites?: (insight: InsightData) => void
 }
 
 export const ExplorationInsights: React.FC<ExplorationInsightsProps> = ({
   topLeft,
   topRight,
   bottomLeft,
-  bottomRight
+  bottomRight,
+  onAddToDashboard,
+  onAddToFavorites
 }) => {
   return (
     <Box>
@@ -44,6 +48,8 @@ export const ExplorationInsights: React.FC<ExplorationInsightsProps> = ({
                 title={topLeft.title}
                 type={topLeft.type}
                 data={topLeft.data}
+                onAddToDashboard={onAddToDashboard}
+                onAddToFavorites={onAddToFavorites}
               />
             </div>
           </Fade>
@@ -55,6 +61,8 @@ export const ExplorationInsights: React.FC<ExplorationInsightsProps> = ({
                 title={topRight.title}
                 type={topRight.type}
                 data={topRight.data}
+                onAddToDashboard={onAddToDashboard}
+                onAddToFavorites={onAddToFavorites}
               />
             </div>
           </Fade>
@@ -68,6 +76,8 @@ export const ExplorationInsights: React.FC<ExplorationInsightsProps> = ({
                 title={bottomLeft.title}
                 type={bottomLeft.type}
                 data={bottomLeft.data}
+                onAddToDashboard={onAddToDashboard}
+                onAddToFavorites={onAddToFavorites}
               />
             </div>
           </Fade>
@@ -79,6 +89,8 @@ export const ExplorationInsights: React.FC<ExplorationInsightsProps> = ({
                 title={bottomRight.title}
                 type={bottomRight.type}
                 data={bottomRight.data}
+                onAddToDashboard={onAddToDashboard}
+                onAddToFavorites={onAddToFavorites}
               />
             </div>
           </Fade>

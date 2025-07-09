@@ -19,7 +19,7 @@ import {
 } from '@mui/icons-material'
 import { useTypedTranslation } from '../../hooks/useTypedTranslation'
 
-interface Dashboard {
+export interface Dashboard {
   id: string
   name: string
   description: string
@@ -118,6 +118,4 @@ export const DashboardList: React.FC<DashboardListProps> = ({
       ))}
     </Grid>
   )
-}
-
-export type { Dashboard } 
+} 
