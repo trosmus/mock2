@@ -4,12 +4,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from './providers/ThemeProvider'
 import { Layout } from './components/Layout'
 import {
-  DataUploadScreen,
-  LoadingScreen,
   ExplorerScreen,
   DashboardScreen,
-  TrailScreen,
   ChatScreen,
+  DataSourcesScreen,
+  DashboardsScreen,
 } from './screens'
 import './i18n'
 
@@ -28,18 +27,15 @@ const App: React.FC = () => {
       <ThemeProvider>
         <BrowserRouter>
           <Routes>
-            {/* Standalone routes (no layout) */}
-            <Route path="/loading" element={<LoadingScreen />} />
-            
             {/* Layout routes */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Navigate to="/explorer" replace />} />
               <Route path="explorer" element={<ExplorerScreen />} />
               <Route path="explorer/*" element={<ExplorerScreen />} />
-              <Route path="upload" element={<DataUploadScreen />} />
               <Route path="dashboard" element={<DashboardScreen />} />
-              <Route path="trail" element={<TrailScreen />} />
+              <Route path="dashboards" element={<DashboardsScreen />} />
               <Route path="chat" element={<ChatScreen />} />
+              <Route path="data-sources" element={<DataSourcesScreen />} />
             </Route>
           </Routes>
         </BrowserRouter>

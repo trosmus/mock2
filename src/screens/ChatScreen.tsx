@@ -1,27 +1,26 @@
-import React, { useState } from 'react'
-import { 
-  Box, 
-  Typography, 
-  Container,
-  useTheme,
-  alpha,
+import React, { useState, useRef, useEffect } from 'react'
+import {
   Paper,
+  Box,
+  Typography,
   TextField,
-  IconButton,
+  Button,
   Card,
   CardContent,
-  Button,
+  CircularProgress,
   Chip,
+  alpha,
+  useTheme,
   Divider,
 } from '@mui/material'
-import { 
-  SmartToy as AgentIcon,
-  Send,
-  AutoAwesome,
+import {
+  Send as SendIcon,
+  Psychology as AgentIcon,
   Person,
   Psychology,
 } from '@mui/icons-material'
 import { useTypedTranslation } from '../hooks/useTypedTranslation'
+import { Page } from '../components/Page'
 
 interface Message {
   id: string
@@ -43,21 +42,22 @@ export const ChatScreen: React.FC = () => {
   const { t } = useTypedTranslation()
   const theme = useTheme()
   const [messages, setMessages] = useState<Message[]>([])
-  const [inputValue, setInputValue] = useState('')
+  const [inputMessage, setInputMessage] = useState('')
   const [isThinking, setIsThinking] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return
+    if (!inputMessage.trim()) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
-      content: inputValue.trim(),
+      content: inputMessage.trim(),
       timestamp: new Date(),
     }
 
     setMessages(prev => [...prev, userMessage])
-    setInputValue('')
+    setInputMessage('')
     setIsThinking(true)
 
     // Simulate AI response
@@ -74,7 +74,7 @@ export const ChatScreen: React.FC = () => {
   }
 
   const handleSuggestedQuestion = (question: string) => {
-    setInputValue(question)
+    setInputMessage(question)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -85,61 +85,11 @@ export const ChatScreen: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Header */}
-      <Box sx={{ mb: 6 }}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2,
-            mb: 2,
-          }}
-        >
-          <Box
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              background: `linear-gradient(135deg, ${alpha('#4857EA', 0.1)}, ${alpha('#4857EA', 0.05)})`,
-              border: `1px solid ${alpha('#4857EA', 0.2)}`,
-            }}
-          >
-            <AgentIcon 
-              sx={{ 
-                fontSize: 32, 
-                color: '#4857EA',
-              }} 
-            />
-          </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography 
-              variant="h4" 
-              component="h1" 
-              sx={{ 
-                fontWeight: 700,
-                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                color: 'text.primary',
-                mb: 0.5,
-                letterSpacing: '-0.02em',
-              }}
-            >
-              {t('CHAT.TITLE')}
-            </Typography>
-            <Typography 
-              variant="body1" 
-              color="text.secondary"
-              sx={{ 
-                fontSize: '1.1rem',
-                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                lineHeight: 1.5,
-              }}
-            >
-              {t('CHAT.SUBTITLE')}
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-
+    <Page
+      title={t('CHAT.TITLE')}
+      subtitle={t('CHAT.SUBTITLE')}
+      icon={<AgentIcon />}
+    >
       <Box sx={{ display: 'flex', gap: 4, height: 'calc(100vh - 200px)' }}>
         {/* Chat Area */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -283,20 +233,25 @@ export const ChatScreen: React.FC = () => {
                           <AgentIcon sx={{ fontSize: 18, color: 'primary.main' }} />
                           <Typography
                             variant="body2"
+                            sx={{
+                              fontWeight: 500,
+                              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                            }}
+                          >
+                            AI Assistant
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                          <CircularProgress size={16} />
+                          <Typography
+                            variant="body2"
                             color="text.secondary"
                             sx={{
                               fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                             }}
                           >
-                            AI is thinking...
+                            Thinking...
                           </Typography>
-                          <AutoAwesome 
-                            sx={{ 
-                              fontSize: 16, 
-                              color: 'primary.main',
-                              animation: 'pulse 1.5s ease-in-out infinite',
-                            }} 
-                          />
                         </Box>
                       </CardContent>
                     </Card>
@@ -305,47 +260,43 @@ export const ChatScreen: React.FC = () => {
               </Box>
             )}
 
-            {/* Input Area */}
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
+            {/* Message Input */}
+            <Box sx={{ display: 'flex', gap: 2 }}>
               <TextField
+                ref={inputRef}
                 fullWidth
-                multiline
-                maxRows={4}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask me about your logistics data..."
                 variant="outlined"
+                placeholder={t('AGENT.PLACEHOLDER')}
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
                 disabled={isThinking}
+                multiline
+                maxRows={3}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
                     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   },
                 }}
               />
-              <IconButton
+              <Button
+                variant="contained"
                 onClick={handleSendMessage}
-                disabled={!inputValue.trim() || isThinking}
+                disabled={!inputMessage.trim() || isThinking}
                 sx={{
-                  bgcolor: 'primary.main',
-                  color: 'primary.contrastText',
-                  '&:hover': {
-                    bgcolor: 'primary.dark',
-                  },
-                  '&:disabled': {
-                    bgcolor: 'action.disabled',
-                    color: 'action.disabled',
-                  },
+                  minWidth: 48,
+                  height: 56,
+                  borderRadius: 2,
+                  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                 }}
               >
-                <Send />
-              </IconButton>
+                <SendIcon />
+              </Button>
             </Box>
           </Paper>
         </Box>
 
-        {/* Suggestions Panel */}
+        {/* Sidebar */}
         <Box sx={{ width: 300 }}>
           <Paper
             elevation={0}
@@ -449,6 +400,6 @@ export const ChatScreen: React.FC = () => {
           </Paper>
         </Box>
       </Box>
-    </Container>
+    </Page>
   )
 } 

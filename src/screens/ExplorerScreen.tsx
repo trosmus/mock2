@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { Container, Box, Typography, Grid, ToggleButton, ToggleButtonGroup, alpha } from '@mui/material'
+import { Box, Typography, Grid, ToggleButton, ToggleButtonGroup, alpha } from '@mui/material'
 import { ViewCarousel, ViewModule } from '@mui/icons-material'
 import { useTypedTranslation } from '../hooks/useTypedTranslation'
 import { addTrailStep } from '../store/appState'
 import { useExplorationNavigation } from '../hooks/useExplorationNavigation'
 import { generateDynamicInsights, getExplorationSubtitle } from '../data/dynamicInsights'
 import { useExplorationLayers } from '../components/exploration/useExplorationLayers'
+import { Page } from '../components/Page'
 import {
-  ExplorationHeader,
   ExplorationGrid,
   ExplorationWizard,
   ExplorationInsights
@@ -114,16 +114,10 @@ export const ExplorerScreen: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Header with Toggle */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <Box sx={{ flex: 1 }}>
-          <ExplorationHeader
-            title={t('EXPLORER.TITLE')}
-            subtitle={subtitle}
-          />
-        </Box>
-
+    <Page
+      title={t('EXPLORER.TITLE')}
+      subtitle={subtitle}
+      actions={
         <ToggleButtonGroup
           value={viewMode}
           exclusive
@@ -161,8 +155,8 @@ export const ExplorerScreen: React.FC = () => {
             <ViewModule />
           </ToggleButton>
         </ToggleButtonGroup>
-      </Box>
-
+      }
+    >
       {/* Conditional Rendering */}
       {viewMode === 'grid' ? (
         <ExplorationGrid
@@ -199,6 +193,6 @@ export const ExplorerScreen: React.FC = () => {
           bottomRight={stableInsights.bottomRight}
         />
       )}
-    </Container>
+    </Page>
   )
 }

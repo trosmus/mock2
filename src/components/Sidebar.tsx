@@ -9,7 +9,6 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  IconButton,
   Typography,
   useTheme,
   useMediaQuery,
@@ -18,17 +17,13 @@ import {
 } from '@mui/material'
 import {
   Dashboard as DashboardIcon,
-  Upload as UploadIcon,
-  Explore as ExploreIcon,
-  Build as BuildIcon,
-  Timeline as TrailIcon,
-  SmartToy as AgentIcon,
-  LightMode as LightModeIcon,
-  DarkMode as DarkModeIcon,
+  CloudUpload as CloudUploadIcon,
+  Assessment as AssessmentIcon,
 } from '@mui/icons-material'
 import {isDrawerExpanded, setIsDrawerExpanded} from '../store/appState'
 import {useTheme as useCustomTheme} from '../providers/ThemeProvider'
 import {useTypedTranslation} from '../hooks/useTypedTranslation'
+import MaterialUISwitch from './MaterialUISwitch'
 
 const DRAWER_WIDTH = 240
 const NAVBAR_HEIGHT = 32
@@ -50,24 +45,17 @@ const menuItems: MenuItem[] = [
     section: 'main',
   },
   {
-    id: 'upload',
-    path: '/upload',
-    icon: <UploadIcon/>,
-    titleKey: 'MENU.UPLOAD',
+    id: 'dashboards',
+    path: '/dashboards',
+    icon: <AssessmentIcon/>,
+    titleKey: 'MENU.DASHBOARDS',
     section: 'main',
   },
   {
-    id: 'builder',
-    path: '/builder',
-    icon: <BuildIcon/>,
-    titleKey: 'MENU.BUILDER',
-    section: 'tools',
-  },
-  {
-    id: 'trail',
-    path: '/trail',
-    icon: <TrailIcon/>,
-    titleKey: 'MENU.TRAIL',
+    id: 'data-sources',
+    path: '/data-sources',
+    icon: <CloudUploadIcon/>,
+    titleKey: 'MENU.DATA_SOURCES',
     section: 'tools',
   },
   // {
@@ -100,7 +88,7 @@ export const Sidebar: React.FC = () => {
     const isSelected = location.pathname === item.path
 
     return (
-      <ListItem key={item.id} disablePadding sx={{ p: 0, mb: 0.5 }}>
+      <ListItem key={item.id} disablePadding sx={{ p: 0, mb: 0.25 }}>
         <ListItemButton
           onClick={() => handleNavigation(item.path)}
           selected={isSelected}
@@ -142,7 +130,7 @@ export const Sidebar: React.FC = () => {
           <ListItemText
             primary={(t as any)(item.titleKey)}
             primaryTypographyProps={{
-              fontSize: '0.75rem',
+              fontSize: '0.85rem',
               fontWeight: 400,
               fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
             }}
@@ -153,18 +141,13 @@ export const Sidebar: React.FC = () => {
   }
 
   const renderSectionHeader = (title: string) => (
-    <Box sx={{ 
-      px: 2,
-      py: 1,
-      mt: 2,
-      mb: 1 
-    }}>
+    <Box sx={{ px: 2, py: 1, mb: 0.5, mt: 3 }}>
       <Typography
         variant="body2"
         sx={{
           color: theme.palette.text.secondary,
           fontWeight: 500,
-          fontSize: '0.75rem',
+          fontSize: '0.875rem',
           fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
         }}
       >
@@ -184,7 +167,7 @@ export const Sidebar: React.FC = () => {
       }}
     >
       {/* Menu Title */}
-      <Box sx={{ px: 2, py: 1, mb: 1 }}>
+      <Box sx={{ px: 2, py: 1, mb: 0.5 }}>
         <Typography
           variant="h6"
           sx={{
@@ -233,22 +216,7 @@ export const Sidebar: React.FC = () => {
         >
           {(t as any)('COMMON.THEME')}
         </Typography>
-        <IconButton
-          onClick={toggleTheme}
-          size="small"
-          sx={{
-            backgroundColor: alpha(theme.palette.primary.main, 0.1),
-            color: theme.palette.primary.main,
-            '&:hover': {
-              backgroundColor: alpha(theme.palette.primary.main, 0.2),
-            },
-          }}
-        >
-          {mode === 'light' ?
-            <DarkModeIcon fontSize="small"/> :
-            <LightModeIcon fontSize="small"/>
-          }
-        </IconButton>
+        <MaterialUISwitch checked={mode === 'dark'} onChange={toggleTheme}/>
       </Box>
     </Box>
   )

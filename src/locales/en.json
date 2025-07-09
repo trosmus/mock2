@@ -41,44 +41,14 @@
   },
   "MENU": {
     "DASHBOARD": "Dashboard",
-    "UPLOAD": "Upload Data",
     "EXPLORER": "Data Explorer",
     "BUILDER": "Dashboard Builder",
-    "TRAIL": "Exploration Trail",
     "AGENT": "AI Agent",
+    "DATA_SOURCES": "Data Sources",
     "SECTIONS": {
       "MAIN": "Main",
       "TOOLS": "Tools"
     }
-  },
-  "UPLOAD": {
-    "TITLE": "Upload Your Logistics Data",
-    "SUBTITLE": "Drop your CSV files here or click to browse",
-    "FORMATS": "Supported formats: CSV, Excel (.xlsx)",
-    "MAX_SIZE": "Maximum file size: 50MB",
-    "DROP_ZONE": "Drop files here...",
-    "BROWSE": "Browse Files",
-    "SELECTED_FILES": "Selected Files",
-    "FILE_COUNT": "{{count}} file(s) selected",
-    "UPLOAD_BUTTON": "Upload Files",
-    "UPLOADING": "Uploading...",
-    "SUCCESS": "Files uploaded successfully!",
-    "ERROR": "Upload failed. Please try again.",
-    "REMOVE_FILE": "Remove file"
-  },
-  "LOADING": {
-    "TITLE": "Processing Your Data",
-    "SUBTITLE": "Please wait while we analyze your logistics data...",
-    "STEPS": {
-      "UPLOADING": "Uploading files",
-      "PARSING": "Parsing data structure", 
-      "VALIDATING": "Validating data quality",
-      "ANALYZING": "Performing initial analysis",
-      "GENERATING": "Generating insights",
-      "FINALIZING": "Finalizing dashboard"
-    },
-    "PROGRESS": "{{percent}}% complete",
-    "ESTIMATED_TIME": "Estimated time remaining: {{time}}"
   },
   "DASHBOARD": {
     "TITLE": "Logistics Insights Dashboard",
@@ -138,56 +108,46 @@
     "DASHBOARD_SAVED": "Dashboard saved successfully!",
     "REMOVE_CARD": "Remove card"
   },
-  "TRAIL": {
-    "TITLE": "Exploration Trail",
-    "SUBTITLE": "Your journey through the logistics data analysis",
-    "CURRENT_LOCATION": "Current Location",
-    "VISIT_AGAIN": "Visit Again",
-    "STEP_COUNT": "{{current}} of {{total}} steps",
-    "EMPTY_TRAIL": "Your exploration trail is empty. Start by uploading data or visiting the dashboard.",
-    "CLEAR_TRAIL": "Clear Trail",
-    "TRAIL_CLEARED": "Trail cleared successfully!"
-  },
   "AGENT": {
-    "TITLE": "AI Logistics Assistant",
-    "SUBTITLE": "Ask me anything about your logistics data and operations",
-    "PLACEHOLDER": "Ask about your logistics data, KPIs, or operational insights...",
+    "TITLE": "AI Assistant",
+    "SUBTITLE": "Get insights and guidance from AI",
+    "PLACEHOLDER": "Ask me about your data...",
     "SEND": "Send",
-    "THINKING": "Thinking...",
-    "EMPTY_CONVERSATION": "Start a conversation with your AI logistics assistant",
-    "SUGGESTIONS": {
-      "TITLE": "Try asking about:",
-      "ITEMS": [
-        "What are my top performing routes?",
-        "Which orders experienced the most delays?",
-        "How can I optimize my delivery costs?",
-        "What patterns do you see in my logistics data?"
-      ]
+    "SUGGESTED_QUESTIONS": "Suggested Questions",
+    "ANALYZING": "Analyzing..."
+  },
+  "DATA_SOURCES": {
+    "TITLE": "Data Sources",
+    "SUBTITLE": "Connect and manage your data source integrations",
+    "ADD_CUSTOM": "Add Custom Source",
+    "SEARCH_PLACEHOLDER": "Search data sources...",
+    "CATEGORIES": {
+      "ALL": "All",
+      "STORAGE": "Storage",
+      "WIKI": "Wiki",
+      "CUSTOMER_SUPPORT": "Customer Support",
+      "CRM": "CRM"
     },
-    "RESPONSES": {
-      "PERFORMANCE": "Based on your logistics data, I can see several performance patterns. Your average delivery time is {{time}} days, with {{percentage}}% of orders delivered on time. The most efficient routes are those serving {{regions}}.",
-      "COSTS": "Your cost analysis shows total logistics expenses of {{cost}}. The average cost per order is {{avgCost}}, with the highest costs typically associated with {{factors}}.",
-      "DELAYS": "Delay analysis indicates a {{rate}}% delay rate across all shipments. The average delay duration is {{duration}} days, with peak delays occurring during {{periods}}.",
-      "ROUTES": "Your route optimization data shows {{routeCount}} active routes with an average efficiency of {{efficiency}}%. The most cost-effective routes are {{topRoutes}}.",
-      "DEFAULT": "I'd be happy to help you analyze your logistics data! I can provide insights on performance metrics, cost analysis, delay patterns, and route optimization. What specific aspect would you like to explore?"
+    "STATUS": {
+      "AVAILABLE": "Available",
+      "BETA": "Beta",
+      "COMING_SOON": "Coming Soon"
+    },
+    "POPULAR": "Popular",
+    "CONNECT": "Connect",
+    "WIZARD": {
+      "BASIC_INFO": "Basic Information",
+      "AUTHENTICATION": "Authentication",
+      "API_CONFIG": "API Configuration",
+      "SYNC_SETTINGS": "Sync Settings",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "TYPE": "Data Source Type",
+      "CATEGORY": "Category",
+      "AUTH_METHOD": "Authentication Method",
+      "API_KEY": "API Key",
+      "CLIENT_ID": "Client ID",
+      "CLIENT_SECRET": "Client Secret"
     }
-  },
-  "NAVIGATION": {
-    "DASHBOARD": "Dashboard",
-    "UPLOAD": "Upload",
-    "EXPLORE": "Explore",
-    "EXPLORER": "Explorer", 
-    "BUILDER": "Builder",
-    "TRAIL": "Trail",
-    "AGENT": "AI Agent"
-  },
-  "ERRORS": {
-    "FILE_TOO_LARGE": "File is too large. Maximum size is 50MB.",
-    "INVALID_FORMAT": "Invalid file format. Please upload CSV or Excel files.",
-    "UPLOAD_FAILED": "Upload failed. Please try again.",
-    "NETWORK_ERROR": "Network error. Please check your connection.",
-    "GENERIC_ERROR": "An error occurred. Please try again.",
-    "DATA_NOT_FOUND": "Data not found.",
-    "PROCESSING_ERROR": "Error processing data."
   }
 } 

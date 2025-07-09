@@ -74,7 +74,10 @@ export const ExplorationLayer: React.FC<ExplorationLayerProps> = ({
             {tiles.map((tile, index) => (
               <Box key={tile.id} sx={{ 
                 flex: shouldCollapseTiles ? '0 0 80px' : '1 1 calc(25% - 44px)', 
-                minWidth: shouldCollapseTiles ? 80 : 200 
+                minWidth: shouldCollapseTiles ? 80 : 200,
+                transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                transformOrigin: 'center',
+                willChange: 'flex, min-width'
               }}>
                 <Fade in timeout={300 + index * 100}>
                   <Box data-tile-id={tile.id} sx={{ position: 'relative', height: '100%' }}>
@@ -91,7 +94,12 @@ export const ExplorationLayer: React.FC<ExplorationLayerProps> = ({
             ))}
             
             {/* Custom Query Tile for Layer */}
-            <Box sx={{ flex: shouldCollapseTiles ? '1 1 auto' : '0 0 80px' }}>
+            <Box sx={{ 
+              flex: shouldCollapseTiles ? '1 1 auto' : '0 0 80px',
+              transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transformOrigin: 'center',
+              willChange: 'flex'
+            }}>
               <CustomQueryTile
                 onCustomQuery={(query) => onCustomQuery(query, layerIndex)}
                 onSelect={() => onCustomQuerySelect(layerIndex)}

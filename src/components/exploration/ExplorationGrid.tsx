@@ -147,7 +147,10 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
           {rootTiles.map((tile, index) => (
             <Box key={tile.id} sx={{ 
               flex: shouldCollapseTiles('root') ? '0 0 80px' : '1 1 calc(25% - 44px)', 
-              minWidth: shouldCollapseTiles('root') ? 80 : 200 
+              minWidth: shouldCollapseTiles('root') ? 80 : 200,
+              transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              transformOrigin: 'center',
+              willChange: 'flex, min-width'
             }}>
               <Fade in timeout={300 + index * 100}>
                 <Box data-tile-id={tile.id} sx={{height: '100%'}}>
@@ -163,7 +166,12 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
           ))}
           
           {/* Custom Query Tile for Root Level */}
-          <Box sx={{ flex: shouldCollapseTiles('root') ? '1 1 auto' : '0 0 80px' }}>
+          <Box sx={{ 
+            flex: shouldCollapseTiles('root') ? '1 1 auto' : '0 0 80px',
+            transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transformOrigin: 'center',
+            willChange: 'flex'
+          }}>
             <CustomQueryTile
               onCustomQuery={handleRootCustomQuery}
               onSelect={handleRootCustomQuerySelect}
@@ -242,6 +250,7 @@ export const ExplorationGrid: React.FC<ExplorationGridProps> = ({
         containerRef={containerRef}
         activeTilePerLayer={activeTilePerLayer}
         visibleLayers={visibleLayers}
+        expandedTilePerLayer={expandedTilePerLayer}
       />
     </Box>
   )

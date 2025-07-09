@@ -7,13 +7,6 @@ export const setIsDrawerExpanded = (expanded: boolean) => {
   isDrawerExpanded.value = expanded
 }
 
-// File upload state
-export interface UploadedFile {
-  name: string
-  size: number
-  type: string
-}
-
 // Progressive Exploration System
 export interface ExplorationTile {
   id: string
@@ -83,9 +76,6 @@ export const resetExploration = () => {
   currentExplorationPath.value = []
 }
 
-// Global state signals
-export const uploadedFiles = signal<UploadedFile[]>([])
-
 // Dashboard builder state
 export interface DashboardCard {
   id: string
@@ -110,33 +100,18 @@ export interface ChatMessage {
 export const chatMessages = signal<ChatMessage[]>([])
 export const isAITyping = signal<boolean>(false)
 
-// Trail state
+// Trail state - simplified for data sources tracking
 export interface TrailStep {
   id: string
   title: string
-  type: 'upload' | 'dashboard' | 'explore' | 'explorer' | 'builder' | 'trail' | 'agent'
+  type: 'dashboard' | 'explore' | 'explorer' | 'builder' | 'agent'
   timestamp: Date
   path?: string
   description?: string
   isCurrentLocation?: boolean
 }
 
-export const explorationTrail = signal<TrailStep[]>([])
-
-// Add trail step helper
+// Add trail step helper - kept for compatibility but disabled
 export const addTrailStep = (step: Omit<TrailStep, 'timestamp' | 'id'>) => {
-  const newStep: TrailStep = {
-    ...step,
-    id: Date.now().toString(),
-    timestamp: new Date(),
-  }
-  
-  // Mark all previous steps as not current
-  explorationTrail.value = explorationTrail.value.map(s => ({
-    ...s,
-    isCurrentLocation: false
-  }))
-  
-  // Add new step as current
-  explorationTrail.value = [...explorationTrail.value, { ...newStep, isCurrentLocation: true }]
+  // No-op - trail functionality has been removed
 } 
