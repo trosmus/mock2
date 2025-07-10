@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trosmus.github.io/mock2/sitemap.xml 
