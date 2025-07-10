@@ -25,7 +25,7 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/mock2">
           <Routes>
             {/* Layout routes */}
             <Route path="/" element={<Layout />}>
